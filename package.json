@@ -1,0 +1,35 @@
+{
+  "name": "polotno-ai-rules",
+  "version": "1.0.0",
+  "description": "AI coding rules and assistant plugins for Polotno SDK — works with Claude Code, Cursor, Copilot, Codex, Windsurf, and more",
+  "bin": {
+    "polotno-ai-rules": "./bin/setup.js"
+  },
+  "keywords": [
+    "polotno",
+    "ai-rules",
+    "claude-code",
+    "cursor",
+    "copilot",
+    "codex",
+    "windsurf",
+    "canvas-editor"
+  ],
+  "author": "Polotno",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polotno-project/polotno-ai-rules.git"
+  },
+  "files": [
+    "bin/",
+    "rules/",
+    "AGENTS.md",
+    ".cursorrules",
+    ".windsurfrules",
+    ".github/",
+    ".mcp.json",
+    ".claude-plugin/",
+    "skills/"
+  ]
+}

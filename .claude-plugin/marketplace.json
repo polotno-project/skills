@@ -1,0 +1,8 @@
+{
+  "name": "polotno-sdk",
+  "title": "Polotno SDK Assistant",
+  "description": "AI coding assistant for Polotno SDK — provides API patterns, documentation search via MCP, and development guidance for building canvas editors.",
+  "categories": ["development", "sdk"],
+  "icon": "palette",
+  "featured": false
+}
