@@ -5,6 +5,10 @@
   "bin": {
     "polotno-ai-rules": "./bin/setup.js"
   },
+  "scripts": {
+    "build": "node bin/build.js",
+    "prepare": "node bin/build.js"
+  },
   "keywords": [
     "polotno",
     "ai-rules",
@@ -24,10 +28,6 @@
   "files": [
     "bin/",
     "rules/",
-    "AGENTS.md",
-    ".cursorrules",
-    ".windsurfrules",
-    ".github/",
     ".mcp.json",
     ".claude-plugin/",
     "skills/"
