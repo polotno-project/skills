@@ -63,14 +63,14 @@ Creates `.windsurfrules` in your project.
 
 ### Manual Setup
 
-If you prefer not to use the CLI, copy the files manually:
+If you prefer not to use the CLI, copy `rules/polotno-rules.md` from this repo to the appropriate location:
 
-| Platform | File to copy | Destination in your project |
-|----------|-------------|---------------------------|
-| Cursor | `.cursorrules` | `.cursorrules` |
-| Copilot | `.github/copilot-instructions.md` | `.github/copilot-instructions.md` |
-| Codex/Jules | `AGENTS.md` | `AGENTS.md` |
-| Windsurf | `.windsurfrules` | `.windsurfrules` |
+| Platform | Destination in your project |
+|----------|---------------------------|
+| Cursor | `.cursorrules` |
+| Copilot | `.github/copilot-instructions.md` |
+| Codex/Jules | `AGENTS.md` |
+| Windsurf | `.windsurfrules` |
 
 ## What's Included
 
@@ -93,7 +93,9 @@ All platform files contain the same comprehensive Polotno SDK knowledge:
 
 ## Source of Truth
 
-All content is derived from `rules/polotno-rules.md`. If you want to customize the rules for your project, edit that file and re-run the setup CLI.
+All content is generated from `rules/polotno-rules.md`. Platform-specific files (`.cursorrules`, `AGENTS.md`, etc.) are not in the repo — they're generated at setup time by the CLI.
+
+To update the rules, edit `rules/polotno-rules.md` and run `npm run build` to regenerate the Claude plugin's API reference.
 
 ## Documentation
 
