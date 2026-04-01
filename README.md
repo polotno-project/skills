@@ -19,51 +19,19 @@ This gives you:
 - **MCP documentation server** — live search of the latest Polotno docs
 - Auto-updates on Claude Code startup
 
-### All Other Platforms (one command)
+### All Other Platforms
+
+Install using the [skills](https://github.com/vercel-labs/skills) CLI — supports 40+ AI coding agents including Cursor, Copilot, Codex, Windsurf, Cline, and more:
 
 ```bash
-npx polotno-ai-rules --all
+npx skills add polotno-project/polotno-ai-rules
 ```
 
-This copies the appropriate rules files into your project root for every supported platform.
-
-### Platform-Specific Setup
-
-#### Cursor
-
-```bash
-npx polotno-ai-rules --cursor --mcp
-```
-
-Creates `.cursorrules` and `.mcp.json` in your project. Restart Cursor to pick up the rules.
-
-#### GitHub Copilot
-
-```bash
-npx polotno-ai-rules --copilot
-```
-
-Creates `.github/copilot-instructions.md` in your project.
-
-#### Codex / Jules / Aider
-
-```bash
-npx polotno-ai-rules --codex
-```
-
-Creates `AGENTS.md` in your project root (read automatically by Codex, Jules, and Aider).
-
-#### Windsurf
-
-```bash
-npx polotno-ai-rules --windsurf
-```
-
-Creates `.windsurfrules` in your project.
+The CLI auto-detects which agents you have and installs the skill for all of them.
 
 ### Manual Setup
 
-If you prefer not to use the CLI, copy `rules/polotno-rules.md` from this repo to the appropriate location:
+Copy `rules/polotno-rules.md` from this repo to the appropriate location:
 
 | Platform | Destination in your project |
 |----------|---------------------------|
