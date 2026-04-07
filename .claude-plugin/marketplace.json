@@ -1,8 +1,24 @@
 {
   "name": "polotno-sdk",
-  "title": "Polotno SDK Assistant",
   "description": "AI coding assistant for Polotno SDK — provides API patterns, documentation search via MCP, and development guidance for building canvas editors.",
-  "categories": ["development", "sdk"],
-  "icon": "palette",
-  "featured": false
+  "owner": {
+    "name": "Polotno",
+    "url": "https://polotno.com"
+  },
+  "plugins": [
+    {
+      "name": "polotno-sdk",
+      "source": "./",
+      "description": "Polotno SDK development assistant — API patterns, docs search, and coding guidance for building canvas editors",
+      "version": "1.0.0",
+      "author": {
+        "name": "Polotno",
+        "url": "https://polotno.com"
+      },
+      "category": "development",
+      "keywords": ["polotno", "canvas", "editor", "sdk", "design"],
+      "homepage": "https://github.com/polotno-project/polotno-ai-rules",
+      "repository": "https://github.com/polotno-project/polotno-ai-rules"
+    }
+  ]
 }

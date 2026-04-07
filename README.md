@@ -11,7 +11,18 @@ Gives your AI assistant knowledge of Polotno's Store API, Page API, Element type
 Install the plugin for automatic skill loading and live documentation search via MCP:
 
 ```bash
-claude plugin add polotno-project/polotno-ai-rules
+# 1. Add the marketplace
+claude plugin marketplace add polotno-project/polotno-ai-rules
+
+# 2. Install the plugin
+claude plugin install polotno-sdk@polotno-sdk
+```
+
+Or from within a Claude Code session:
+
+```
+/plugin marketplace add polotno-project/polotno-ai-rules
+/plugin install polotno-sdk@polotno-sdk
 ```
 
 This gives you:
