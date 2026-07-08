@@ -1,80 +1,96 @@
-# Polotno AI Rules
+# Polotno AI Skills
 
-AI coding rules and assistant plugins for **Polotno SDK** — works with Claude Code, Cursor, GitHub Copilot, Codex, Windsurf, and more.
+Agent skills for **Polotno** — installable knowledge packs that teach your AI assistant (Claude Code, Cursor, Codex, Copilot, Windsurf, and more) how to build with Polotno SDK and how to generate Polotno designs.
 
-Gives your AI assistant knowledge of Polotno's Store API, Page API, Element types, UI components, customization patterns, and common gotchas.
+## The Skills
 
-## Setup
+| Skill | What it does | Use it when |
+|-------|--------------|-------------|
+| **polotno-sdk** | Polotno SDK development assistant — Store/Page/Element APIs, React UI components, customization patterns, common gotchas, plus live documentation search via MCP | You're embedding or customizing a Polotno canvas editor in your app |
+| **polotno-design** | Headless design generation — produce a Polotno JSON design from a text brief, render it to PNG/PDF, iterate visually against a design rubric, and bulk-generate variants from data (CSV/list) | You want the agent to create posters, social posts, ads, flyers, or marketing images — no editor UI involved |
 
-### Claude Code (recommended — richest experience)
+Both skills live in [`skills/`](skills/), one folder per skill with a `SKILL.md` entry point.
 
-Install the plugin for automatic skill loading and live documentation search via MCP:
+## Install
+
+### Claude Code (recommended)
+
+The plugin gives you both skills plus a live documentation MCP server:
 
 ```bash
 # 1. Add the marketplace
-claude plugin marketplace add polotno-project/polotno-ai-rules
+claude plugin marketplace add polotno-project/skills
 
 # 2. Install the plugin
-claude plugin install polotno-sdk@polotno-sdk
+claude plugin install polotno@polotno
 ```
 
 Or from within a Claude Code session:
 
 ```
-/plugin marketplace add polotno-project/polotno-ai-rules
-/plugin install polotno-sdk@polotno-sdk
+/plugin marketplace add polotno-project/skills
+/plugin install polotno@polotno
 ```
 
 This gives you:
-- **Polotno SDK skill** — auto-triggered with API patterns and code examples
+- Both skills, auto-triggered when relevant
 - **MCP documentation server** — live search of the latest Polotno docs
 - Auto-updates on Claude Code startup
 
-### All Other Platforms
+### All other platforms
 
-Install using the [skills](https://github.com/vercel-labs/skills) CLI — supports 40+ AI coding agents including Cursor, Copilot, Codex, Windsurf, Cline, and more:
+Install with the [skills](https://github.com/vercel-labs/skills) CLI — it supports 40+ AI coding agents including Cursor, Copilot, Codex, Windsurf, and Cline, auto-detects which ones you have, and converts the skills to each agent's native format:
 
 ```bash
-npx skills add polotno-project/polotno-ai-rules
+npx skills add polotno-project/skills
 ```
 
-The CLI auto-detects which agents you have and installs the skill for all of them.
+### Manual setup
 
-### Manual Setup
+Copy the skill content into your agent's instructions file:
 
-Copy `rules/polotno-rules.md` from this repo to the appropriate location:
+- SDK knowledge: [`skills/polotno-sdk/SKILL.md`](skills/polotno-sdk/SKILL.md) and its [`capabilities.md`](skills/polotno-sdk/capabilities.md)
+- Design generation: [`skills/polotno-design/SKILL.md`](skills/polotno-design/SKILL.md) (also needs its `scripts/` and `reference/` folders alongside it)
 
-| Platform | Destination in your project |
-|----------|---------------------------|
+| Platform | Instructions file |
+|----------|-------------------|
 | Cursor | `.cursorrules` |
 | Copilot | `.github/copilot-instructions.md` |
-| Codex/Jules | `AGENTS.md` |
+| Codex / Jules | `AGENTS.md` |
 | Windsurf | `.windsurfrules` |
 
-## What's Included
+### Recommended: live docs search (MCP)
 
-### Cross-Platform Rules
+The sdk skill is designed to look up API details in the live Polotno docs. The Claude Code plugin ships this MCP server automatically. On other MCP-capable agents (Cursor, Codex, Windsurf, …), add it to your MCP config:
 
-All platform files contain the same comprehensive Polotno SDK knowledge:
+```json
+{
+  "mcpServers": {
+    "polotno-documentation": {
+      "command": "npx",
+      "args": [
+        "crawl-chat-mcp",
+        "--id=67e312247a822a2303f2b8a7",
+        "--name=polotno_documentation"
+      ]
+    }
+  }
+}
+```
 
-- **Store API** — `createStore`, pages, sizing, selection, grouping, undo/redo, JSON import/export, image/PDF/SVG/HTML/GIF export
-- **Page API** — `addElement`, `set`, `clone`, `children`, sizing
-- **Element types** — text, image, SVG, figure, line, video, group with full property examples
-- **UI Components** — `Workspace`, `Toolbar`, `SidePanel`, `PagesTimeline`, `ZoomButtons`, `PolotnoContainer`
-- **Customization** — custom side panels, images grids, toolbar components, custom fonts
-- **Common gotchas** — `custom` attribute, `isAlive` guard, `waitLoading`, Blueprint CSS, MobX observer pattern
+Without it, the skill falls back to fetching https://polotno.com/docs directly.
 
-### Claude Code Plugin (additional features)
+## Notes on the design skill
 
-- **Dedicated skill** with detailed API reference and coding guidance
-- **MCP server** for live Polotno documentation search
-- Auto-triggered when working with Polotno code
+`polotno-design` runs a closed visual loop: generate JSON → render → the agent *looks* at the render → critique against a rubric → fix → repeat. It works best in agents with terminal access and vision (Claude Code). It needs Node.js, and rendering/asset search use a Polotno API key — the bundled scripts fall back to a rate-limited public demo key, so set your own for real use:
 
-## Source of Truth
+```bash
+export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
+```
 
-All content is generated from `rules/polotno-rules.md`. Platform-specific files (`.cursorrules`, `AGENTS.md`, etc.) are not in the repo — they're generated at setup time by the CLI.
+## Maintaining
 
-To update the rules, edit `rules/polotno-rules.md` and run `npm run build` to regenerate the Claude plugin's API reference.
+Skills are edited directly under `skills/` — each skill is self-contained. The sdk skill is `SKILL.md` (core model) + `capabilities.md` (feature map); the design skill's behavior lives in its `SKILL.md`, `reference/`, and `scripts/`.
 
 ## Documentation
 

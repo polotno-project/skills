@@ -1,9 +1,9 @@
 {
-  "name": "polotno-sdk",
-  "description": "Polotno SDK development assistant — API patterns, docs search, and coding guidance",
+  "name": "polotno",
+  "description": "Polotno AI skills — SDK development assistant, headless design generation, and live docs search",
   "version": "1.0.0",
   "author": {
     "name": "Polotno"
   },
-  "repository": "https://github.com/polotno-project/polotno-ai-rules"
+  "repository": "https://github.com/polotno-project/skills"
 }

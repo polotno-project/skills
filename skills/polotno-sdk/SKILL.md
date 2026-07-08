@@ -1,63 +1,85 @@
 ---
 name: polotno-sdk
-description: Polotno SDK development assistant — API patterns, best practices, and live documentation search
-trigger: auto
+description: >-
+  Polotno SDK development assistant — store/page/element APIs, React UI
+  components, customization patterns, and live documentation search. Use when
+  building or customizing a Polotno canvas editor in an app: code that imports
+  polotno, side panels, toolbars, workspace, export. For generating designs
+  headlessly from a brief, use the polotno-design skill instead.
 ---
 
-# Polotno SDK Development Assistant
+# Polotno SDK
 
-You are helping a developer build with **Polotno SDK** — a JavaScript/React library for canvas editors.
+Polotno is a JavaScript/React SDK for building canvas design editors. State is
+MobX/MobX-State-Tree. Since **Polotno 4** the UI is Polotno's own design system —
+Blueprint.js is deprecated. Two release lines: **4.x** = React 19 (`npm i polotno`),
+**3.x** = React 18.
 
-## How to help
+## Depth policy: look it up, don't guess
 
-1. **Check the API reference** below for common patterns and code examples
-2. **Use the `polotno_documentation` MCP tool** to search the latest docs when:
-   - You need details about a specific API method not covered here
-   - The developer asks about advanced features, customization, or edge cases
-   - You're unsure about parameter options or return values
-3. **Follow the gotchas and patterns** listed below to avoid common mistakes
+The SDK is large; this skill carries only the core model and a capability map.
+For any specific method, prop, or option, **look up the current docs**:
 
-## API Reference
+1. Query the `polotno_documentation` MCP tool, e.g.
+   `polotno_documentation("store export PDF options")`.
+2. If that tool is unavailable, fetch the same content from
+   https://polotno.com/docs.
 
-@api-reference.md
+Before saying something is impossible or hand-rolling it, scan `capabilities.md`
+in this skill folder — it maps everything the SDK provides, with lookup hints.
 
-## Key Patterns to Follow
+## Quick start
 
-### MobX Reactivity
-- Always wrap React components that read store/element properties in `observer()` from `mobx-react-lite`
-- Read properties directly: `element.x`, not via getters
-- Update via `element.set({ x: 100 })`, never assign directly
-
-### MST `isAlive` Guard
-Any MST computed view that accesses a parent node must check `isAlive(self)` first:
 ```js
-import { isAlive } from 'mobx-state-tree';
+import { createStore } from 'polotno/model/store';
 
-// In computed views:
-get someComputed() {
-  if (!isAlive(self)) return defaultValue;
-  const parent = getParent(self);
-  // ... use parent safely
-}
-```
-This prevents errors when React unmounts asynchronously after MST destroys nodes.
-
-### Testing
-- **Browser tests** (`*.browser.test.tsx`): For anything involving React rendering, MobX reactions, or UI
-- **Model tests** (`*.test.ts`): Only for pure model logic without rendering
-- Write a failing test first, then implement the fix (TDD)
-
-### Custom Data Storage
-Always use the `custom` attribute — arbitrary properties on elements are silently ignored:
-```js
-element.set({ custom: { myAppData: 'value' } });
+const store = createStore({ key: 'YOUR_API_KEY' }); // https://polotno.com/cabinet/
+const page = store.addPage();
 ```
 
-## When Unsure
+```jsx
+import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
+import { Toolbar } from 'polotno/toolbar/toolbar';
+import { SidePanel } from 'polotno/side-panel';
+import { Workspace } from 'polotno/canvas/workspace';
+import { ZoomButtons } from 'polotno/toolbar/zoom-buttons';
+import { PagesTimeline } from 'polotno/pages-timeline';
+import 'polotno/ui.css'; // Polotno 4+. (Polotno 2/3 used @blueprintjs css)
 
-Query the MCP documentation server:
+const App = () => (
+  <PolotnoContainer style={{ width: '100vw', height: '100vh' }}>
+    <SidePanelWrap>
+      <SidePanel store={store} />
+    </SidePanelWrap>
+    <WorkspaceWrap>
+      <Toolbar store={store} />
+      <Workspace store={store} />
+      <ZoomButtons store={store} />
+      <PagesTimeline store={store} />
+    </WorkspaceWrap>
+  </PolotnoContainer>
+);
 ```
-polotno_documentation("store export PDF options")
-polotno_documentation("custom side panel section")
-polotno_documentation("element locking properties")
-```
+
+## Core model
+
+- **store → pages → elements.** `createStore()` → `store.addPage()` →
+  `page.addElement({ type, ... })`. Element types: `text`, `image`, `svg`,
+  `figure`, `line`, `video`, `gif`, `table`, `group`.
+- **Read directly, write via `set`.** Read `element.x`; update with
+  `element.set({ x: 100 })`. Same for pages and store settings.
+- **App data goes in `custom`.** Arbitrary properties are silently ignored:
+  `element.set({ custom: { myId: '12' } })`, read `element.custom?.myId`.
+- **MobX reactivity.** Wrap every React component that reads store/element
+  state in `observer()` from `mobx-react-lite`.
+- **`await store.waitLoading()`** before any export — images and fonts may
+  still be loading.
+- **Serialization.** `store.toJSON()` / `store.loadJSON(json)` round-trip the
+  whole design; this JSON is also what templates and server-side rendering use.
+  Validate or normalize it without the editor via the `@polotno/schema` package.
+- **Custom UI matches the editor** when built from `polotno/primitives`
+  (`Button`, `Input`, `Popover`, …) — they follow the editor theme, including
+  dark mode.
+- **MST `isAlive` guard.** A computed view that accesses a parent node
+  (`getParent`) must check `isAlive(self)` first — MST destroys nodes
+  synchronously, React unmounts asynchronously.
