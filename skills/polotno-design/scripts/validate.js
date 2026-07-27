@@ -79,10 +79,15 @@ function fixFilters(filters) {
 
 function fixTextOverflow(el, canvasWidth) {
   if (el.type !== 'text') return;
-  // letterSpacing is % of fontSize; >3 or <-1 are almost always px mistakes.
-  if (el.letterSpacing !== undefined && (el.letterSpacing > 3 || el.letterSpacing < -1)) {
-    note(`reset letterSpacing ${el.letterSpacing} on "${el.id || 'text'}"`);
-    el.letterSpacing = 0;
+  // letterSpacing is an em multiple of fontSize: 0.05-0.1 is subtle tracking,
+  // 0.2-0.3 is wide display tracking. At >=1 the text overflows its box and
+  // Polotno auto-shrinks the font to compensate, so it renders tiny, not wide.
+  // Anything past ~0.5 is almost always a px value written by mistake — clamp
+  // to a usable amount rather than zeroing, so the tracking intent survives.
+  if (el.letterSpacing !== undefined && (el.letterSpacing > 0.5 || el.letterSpacing < -0.1)) {
+    const clamped = el.letterSpacing > 0 ? 0.1 : 0;
+    note(`clamped letterSpacing ${el.letterSpacing} -> ${clamped} on "${el.id || 'text'}"`);
+    el.letterSpacing = clamped;
   }
   const fontSize = el.fontSize || 16;
   const text = el.text || '';
@@ -179,6 +184,17 @@ async function main() {
   } catch (e) {
     console.log(JSON.stringify({ valid: false, errors: [{ path: '', message: `normalize failed: ${e.message}` }], fixes }, null, 2));
     process.exit(1);
+  }
+
+  // 2b. @polotno/schema defaults a text element's height to 0 ("0 until
+  //     measured/rendered"). That sentinel is fine in the model, but writing it
+  //     into the design is not: polotno-node reads it as a literal height and
+  //     renders the text collapsed to nothing — while validation still passes.
+  //     Text height is measured at render time, so drop it entirely.
+  for (const page of design.pages || []) {
+    for (const el of page.children || []) {
+      if (el.type === 'text' && el.height === 0) delete el.height;
+    }
   }
 
   // 3. validate (canonical = reject unknown keys)
