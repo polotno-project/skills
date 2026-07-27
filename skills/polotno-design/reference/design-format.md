@@ -43,8 +43,18 @@ before text.
 ## Element types
 
 - **text** — `text`, `fontSize`, `fontFamily`, `fontWeight`, `fontStyle`, `fill`,
-  `align` (left/center/right), `lineHeight`, `letterSpacing` (% of fontSize: 0 normal,
-  ~1 subtle; not pixels). Width must hold the text (validate.js will widen/shrink).
+  `align` (left/center/right), `lineHeight`, `letterSpacing`. Width must hold the
+  text (validate.js will widen/shrink). Do **not** set `height` — it is measured at
+  render time, and a literal `0` renders the text collapsed to nothing.
+  `letterSpacing` is an **em multiple of fontSize**, not pixels:
+
+  | value | result |
+  |-------|--------|
+  | `0` | normal |
+  | `0.05`–`0.1` | subtle tracking — the right range for small-caps labels |
+  | `0.2`–`0.3` | wide display tracking |
+  | `0.5` | very wide; near the usable limit |
+  | `>= 1` | broken — the text overflows its box and Polotno auto-shrinks the font, so it renders *tiny*, not wide |
 - **figure** — `subType` (`rect`, `circle`, `star`, `triangle`, `line`, `diamond`,
   `hexagon`, `blob1`…), `fill`, `stroke`, `strokeWidth`, `cornerRadius`. Use figures
   for backgrounds, color blocks, scrims, dividers, accents — prefer them over photos
