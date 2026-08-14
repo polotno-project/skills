@@ -48,7 +48,7 @@ curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: image/png" \
 
 App extras beyond the shared verbs: `open_design` (focus a design's tab —
 the only call that changes what the human is looking at), `add_page` /
-`remove_page` / `move_page`, `get_design_info`, `list_fonts` / `add_font`.
+`remove_page` / `move_page`, `get_design_info`.
 
 ## Recipes
 
