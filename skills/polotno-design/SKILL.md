@@ -4,14 +4,21 @@ description: >-
   Generate, render, and bulk-produce Polotno designs from a brief. Use when the
   user wants to create a design, poster, flyer, social post, ad, invitation, menu,
   or marketing image from a description; render Polotno JSON to PNG/PDF; or
-  bulk-generate design variants from data (a CSV or list). Headless and
-  terminal-based — for building an editor UI, use the polotno-sdk skill instead.
+  bulk-generate design variants from data (a CSV or list). Works two ways: live
+  through the Polotno desktop app's MCP tools when connected, or headless from
+  the terminal. For building an editor UI, use the polotno-sdk skill instead.
 ---
 
 # Polotno design generation
 
-Produce shippable Polotno designs from a text brief, headlessly. The output is a
+Produce shippable Polotno designs from a text brief. The output is a
 Polotno JSON design plus a rendered PNG/PDF.
+
+**Which path?** If the Polotno app's MCP tools are available (`create_design`,
+`add_element`, `render_page`, …), work live in the app the human is watching:
+read `reference/mcp-tools.md` and follow it — the design rules and rubric below
+still apply, the scripts do not. Otherwise continue here with the headless
+workflow.
 
 The core idea is a closed loop: start from an **archetype** (a composition skeleton,
 never a blank canvas), render it, **look** at the render with your own eyes, and
