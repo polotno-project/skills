@@ -1,6 +1,6 @@
 {
   "name": "polotno",
-  "description": "Polotno AI skills — SDK development assistant, headless design generation, and live docs search",
+  "description": "Polotno AI skills — SDK development assistant, design generation (app-connected or headless), and live docs search",
   "version": "1.0.0",
   "author": {
     "name": "Polotno"

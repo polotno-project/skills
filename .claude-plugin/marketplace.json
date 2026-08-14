@@ -1,6 +1,6 @@
 {
   "name": "polotno",
-  "description": "AI skills for Polotno — SDK development assistance and headless design generation for building canvas editors and producing designs.",
+  "description": "AI skills for Polotno — SDK development assistance and design generation (app-connected or headless) for building canvas editors and producing designs.",
   "owner": {
     "name": "Polotno",
     "url": "https://polotno.com"
@@ -9,14 +9,20 @@
     {
       "name": "polotno",
       "source": "./",
-      "description": "Polotno AI skills — SDK development assistant, headless design generation, and live docs search via MCP",
+      "description": "Polotno AI skills — SDK development assistant, design generation (app-connected or headless), and live docs search via MCP",
       "version": "1.0.0",
       "author": {
         "name": "Polotno",
         "url": "https://polotno.com"
       },
       "category": "development",
-      "keywords": ["polotno", "canvas", "editor", "sdk", "design"],
+      "keywords": [
+        "polotno",
+        "canvas",
+        "editor",
+        "sdk",
+        "design"
+      ],
       "homepage": "https://github.com/polotno-project/skills",
       "repository": "https://github.com/polotno-project/skills"
     }

@@ -2,12 +2,18 @@
 
 Agent skills for **Polotno** — installable knowledge packs that teach your AI assistant (Claude Code, Cursor, Codex, Copilot, Windsurf, and more) how to build with Polotno SDK and how to generate Polotno designs.
 
+Quickest start — paste this into any agent:
+
+```
+Read https://polotno.com/skills/design.md and follow it.
+```
+
 ## The Skills
 
 | Skill | What it does | Use it when |
 |-------|--------------|-------------|
 | **polotno-sdk** | Polotno SDK development assistant — Store/Page/Element APIs, React UI components, customization patterns, common gotchas, plus live documentation search via MCP | You're embedding or customizing a Polotno canvas editor in your app |
-| **polotno-design** | Headless design generation — produce a Polotno JSON design from a text brief, render it to PNG/PDF, iterate visually against a design rubric, and bulk-generate variants from data (CSV/list) | You want the agent to create posters, social posts, ads, flyers, or marketing images — no editor UI involved |
+| **polotno-design** | Design generation against whatever Polotno runtime is available — the Polotno desktop app (live, the human co-edits), a skill-served local editor in the browser, or fully headless. Produces a design from a text brief, renders and iterates visually against a rubric, exports PNG/PDF (including print-ready), and bulk-generates variants from data (CSV/list) | You want the agent to create posters, social posts, ads, flyers, invitations, or print PDFs |
 
 Both skills live in [`skills/`](skills/), one folder per skill with a `SKILL.md` entry point.
 
@@ -82,7 +88,7 @@ Without it, the skill falls back to fetching https://polotno.com/docs directly.
 
 ## Notes on the design skill
 
-`polotno-design` runs a closed visual loop: generate JSON → render → the agent *looks* at the render → critique against a rubric → fix → repeat. It works best in agents with terminal access and vision (Claude Code). It needs Node.js, and rendering/asset search use a Polotno API key — the bundled scripts fall back to a rate-limited public demo key, so set your own for real use:
+`polotno-design` runs a closed visual loop: generate JSON → render → the agent *looks* at the render → critique against a rubric → fix → repeat. It picks its runtime dynamically (its "Step 0" ladder): the Polotno desktop app when connected (MCP or local HTTP), a skill-served local editor next to the chat, or fully headless. It works best in agents with terminal access and vision (Claude Code). Headless rendering and asset search need Node.js and a Polotno API key — the bundled scripts fall back to a rate-limited public demo key, so set your own for real use:
 
 ```bash
 export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
