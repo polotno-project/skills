@@ -1,0 +1,48 @@
+name: Validate distribution
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Select the comparison commit
+        id: base
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PULL_REQUEST_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            echo "sha=$PULL_REQUEST_BASE" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=$PUSH_BASE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate distribution metadata
+        run: node scripts/validate-distribution.mjs "${{ steps.base.outputs.sha }}"
+
+      - name: Install design script dependencies
+        working-directory: skills/polotno-design/scripts
+        run: npm install --package-lock=false
+
+      - name: Test the design skill scripts
+        working-directory: skills/polotno-design/scripts
+        run: npm test

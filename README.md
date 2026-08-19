@@ -12,22 +12,19 @@ Read https://polotno.com/skills/design.md and follow it.
 
 | Skill | What it does | Use it when |
 |-------|--------------|-------------|
-| **polotno-sdk** | Polotno SDK development assistant — Store/Page/Element APIs, React UI components, customization patterns, common gotchas, plus live documentation search via MCP | You're embedding or customizing a Polotno canvas editor in your app |
-| **polotno-design** | Design generation against whatever Polotno runtime is available — the Polotno desktop app (live, the human co-edits), a skill-served local editor in the browser, or fully headless. Produces a design from a text brief, renders and iterates visually against a rubric, exports PNG/PDF (including print-ready), and bulk-generates variants from data (CSV/list) | You want the agent to create posters, social posts, ads, flyers, invitations, or print PDFs |
+| **polotno-sdk** | Polotno SDK development assistant for APIs, React components, customization, and live documentation search | You embed or customize a Polotno editor |
+| **polotno-design** | Design production through the best available Polotno runtime. It produces editable JSON, makes visual proofs, exports PNG or PDF, and creates data variants. | You want the agent to create posters, social posts, ads, flyers, invitations, or print PDFs |
 
 Both skills live in [`skills/`](skills/), one folder per skill with a `SKILL.md` entry point.
 
-## Install
+## Install and update
 
-### Claude Code (recommended)
+### Claude Code
 
 The plugin gives you both skills plus a live documentation MCP server:
 
 ```bash
-# 1. Add the marketplace
 claude plugin marketplace add polotno-project/skills
-
-# 2. Install the plugin
 claude plugin install polotno@polotno
 ```
 
@@ -38,36 +35,67 @@ Or from within a Claude Code session:
 /plugin install polotno@polotno
 ```
 
-This gives you:
-- Both skills, auto-triggered when relevant
-- **MCP documentation server** — live search of the latest Polotno docs
-- Auto-updates on Claude Code startup
+The plugin provides both skills and a live documentation MCP server.
 
-### All other platforms
-
-Install with the [skills](https://github.com/vercel-labs/skills) CLI — it supports 40+ AI coding agents including Cursor, Copilot, Codex, Windsurf, and Cline, auto-detects which ones you have, and converts the skills to each agent's native format:
+Run this command to update an installed plugin:
 
 ```bash
-npx skills add polotno-project/skills
+claude plugin update polotno@polotno
+```
+
+Claude Code disables automatic updates for third-party marketplaces by default.
+Use `/plugin`, select **Marketplaces**, and enable automatic updates if you want them.
+
+After an update, start a new session or run `/reload-plugins`.
+
+### ChatGPT desktop app and Codex
+
+Add the marketplace and install the plugin:
+
+```bash
+codex plugin marketplace add polotno-project/skills
+codex plugin add polotno@polotno
+```
+
+This plugin contains skills only. It does not start the optional documentation MCP server.
+
+After an update, start a new thread. Restart the ChatGPT desktop app if it does not load the new version.
+
+Run these commands to update the marketplace and reinstall the current plugin:
+
+```bash
+codex plugin marketplace upgrade polotno
+codex plugin add polotno@polotno
+```
+
+### Other agents
+
+Use the [skills CLI](https://github.com/vercel-labs/skills) with supported agents, such as Cursor, Copilot, Windsurf, and Cline:
+
+```bash
+npx skills add polotno-project/skills --skill polotno-design
+```
+
+Run this command to update an installed skill:
+
+```bash
+npx skills update polotno-design
 ```
 
 ### Manual setup
 
-Copy the skill content into your agent's instructions file:
+Copy the complete skill directory into your agent's skill directory.
+Keep each `SKILL.md` file with its referenced files and scripts.
 
-- SDK knowledge: [`skills/polotno-sdk/SKILL.md`](skills/polotno-sdk/SKILL.md) and its [`capabilities.md`](skills/polotno-sdk/capabilities.md)
-- Design generation: [`skills/polotno-design/SKILL.md`](skills/polotno-design/SKILL.md) (also needs its `scripts/` and `reference/` folders alongside it)
-
-| Platform | Instructions file |
-|----------|-------------------|
-| Cursor | `.cursorrules` |
-| Copilot | `.github/copilot-instructions.md` |
-| Codex / Jules | `AGENTS.md` |
-| Windsurf | `.windsurfrules` |
+If your agent accepts only text, copy `SKILL.md` and its referenced Markdown files.
+In that case, bundled scripts are unavailable.
 
 ### Recommended: live docs search (MCP)
 
-The sdk skill is designed to look up API details in the live Polotno docs. The Claude Code plugin ships this MCP server automatically. On other MCP-capable agents (Cursor, Codex, Windsurf, …), add it to your MCP config:
+The SDK skill looks up current API details in the live Polotno documentation.
+The Claude Code plugin includes this MCP server.
+
+For another MCP-compatible agent, add the server to its MCP configuration:
 
 ```json
 {
@@ -88,7 +116,7 @@ Without it, the skill falls back to fetching https://polotno.com/docs directly.
 
 ## Notes on the design skill
 
-`polotno-design` runs a closed visual loop: generate JSON → render → the agent *looks* at the render → critique against a rubric → fix → repeat. It picks its runtime dynamically (its "Step 0" ladder): the Polotno desktop app when connected (MCP or local HTTP), a skill-served local editor next to the chat, or fully headless. It works best in agents with terminal access and vision (Claude Code). Headless rendering and asset search need Node.js and a Polotno API key — the bundled scripts fall back to a rate-limited public demo key, so set your own for real use:
+`polotno-design` uses this production flow: delivery contract → composition → preflight → visual proof → repair → package. It selects a connected desktop app, a local browser editor, or headless scripts. Terminal and image-view access give the best results. Headless rendering and asset search need Node.js and a Polotno API key. If no key is set, the scripts use a rate-limited public demo key:
 
 ```bash
 export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
@@ -96,7 +124,9 @@ export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
 
 ## Maintaining
 
-Skills are edited directly under `skills/` — each skill is self-contained. The sdk skill is `SKILL.md` (core model) + `capabilities.md` (feature map); the design skill's behavior lives in its `SKILL.md`, `reference/`, and `scripts/`.
+Edit skills directly under `skills/`. Each skill is self-contained. The SDK
+skill uses `SKILL.md` and `capabilities.md`. The design skill also uses its
+`reference/` and `scripts/` folders.
 
 ## Documentation
 

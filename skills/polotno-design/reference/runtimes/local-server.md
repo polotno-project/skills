@@ -8,10 +8,12 @@ browser while you keep working on the file:
 node scripts/serve.js design.json
 ```
 
-The first run builds the editor bundle locally (~10s); then it prints a
-`http://localhost:<port>` URL — give it to the user. The page
-is a full Polotno editor bound to `design.json`: it reloads when you change
-the file, and the human's edits save back into the same file. This runtime
+The server installs missing npm packages. It checks for permitted updates at
+most once every seven days. A change to a package version causes an editor
+rebuild. The first build takes approximately 10 seconds. Then the server prints a
+`http://localhost:<port>` URL. Give this URL to the user.
+The page is a full Polotno editor bound to `design.json`. It reloads after a
+file change. User edits save into the same file. This runtime
 speaks the same verbs as `commands.md` — file-side, over your existing
 scripts:
 
@@ -19,7 +21,8 @@ scripts:
 |---|---|
 | create/read/patch design | edit `design.json` directly (validate after) |
 | `render`, `export` | `node scripts/render.js …` (see `headless.md`) |
-| `lint` | `node scripts/validate.js design.json` |
+| schema validation | `node scripts/validate.js design.json` |
+| `lint` | `node scripts/lint.js design.json` |
 
 ## Remote / cloud sandboxes
 
@@ -35,10 +38,10 @@ human's browser cannot reach it. In that case:
 
 Rules of the road:
 
-- **Re-read before you write.** The human may have saved changes from the
+- **Re-read before you write.** The human can save changes from the
   browser since your last read. Read `design.json` fresh before each edit,
   as with any shared file.
-- Announce the URL once; don't repeat it every turn.
+- Announce the URL once. Do not repeat it every turn.
 - If `scripts/serve.js` is missing, your copy of the skill predates this
   runtime — fall through to `headless.md`.
-- Stop the server when the task ends (Ctrl-C / kill the process) and say so.
+- After the task ends, stop the server. Tell the user that the server stopped.

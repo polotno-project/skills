@@ -1,7 +1,7 @@
 # Importing existing files
 
-Turn a user's existing file into an editable Polotno design. Fidelity is
-good but never pixel-perfect — always render and check after import.
+Turn an existing file into an editable Polotno design. Import fidelity varies
+by file. Always make a source proof and an imported proof.
 
 | Format | Package | Runs in | Entry |
 |---|---|---|---|
@@ -16,8 +16,8 @@ Notes:
   app runtime, just `open` the file instead of importing by hand.
 - SVG import cannot run in plain Node scripts (no DOM). Headless runtime:
   hand the file to a browser context or the app, or tell the user.
-- After any import: `validate`, `render`, and fix — imported text sizing
-  and fonts are the usual casualties.
+- After an import, run schema validation and `lint`. Then render the result.
+  Compare it with the source. Repair text fit, font, crop, and structure errors.
 
 ## Never claim
 

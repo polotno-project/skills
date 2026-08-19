@@ -1,9 +1,22 @@
 {
   "name": "polotno",
-  "description": "Polotno AI skills — SDK development assistant, design generation (app-connected or headless), and live docs search",
-  "version": "1.0.0",
+  "description": "Polotno skills for SDK development, editable design production, and live documentation search",
+  "version": "2.0.0",
   "author": {
-    "name": "Polotno"
+    "name": "Polotno",
+    "url": "https://polotno.com"
   },
-  "repository": "https://github.com/polotno-project/skills"
+  "homepage": "https://polotno.com/docs/build-with-ai",
+  "repository": "https://github.com/polotno-project/skills",
+  "license": "MIT",
+  "mcpServers": {
+    "polotno-documentation": {
+      "command": "npx",
+      "args": [
+        "crawl-chat-mcp",
+        "--id=67e312247a822a2303f2b8a7",
+        "--name=polotno_documentation"
+      ]
+    }
+  }
 }

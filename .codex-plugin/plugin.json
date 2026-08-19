@@ -1,0 +1,37 @@
+{
+  "name": "polotno",
+  "version": "2.0.0",
+  "description": "Polotno skills for SDK development and editable design production.",
+  "author": {
+    "name": "Polotno",
+    "url": "https://polotno.com"
+  },
+  "homepage": "https://polotno.com/docs/build-with-ai",
+  "repository": "https://github.com/polotno-project/skills",
+  "license": "MIT",
+  "keywords": [
+    "polotno",
+    "canvas",
+    "design",
+    "sdk"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Polotno",
+    "shortDescription": "Build Polotno apps and produce editable designs.",
+    "longDescription": "Use Polotno skills for SDK development, editable design production, rendering, export, localization, resizing, and data variants.",
+    "developerName": "Polotno",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://polotno.com",
+    "privacyPolicyURL": "https://polotno.com/legal/privacy",
+    "termsOfServiceURL": "https://polotno.com/legal/terms-of-service",
+    "defaultPrompt": [
+      "Create an editable Polotno design from my brief.",
+      "Help me build or customize a Polotno editor."
+    ]
+  }
+}

@@ -22,6 +22,7 @@
  */
 const fs = require('fs');
 
+const { ensureDependencies } = require('./dependencies');
 const { KEY } = require('./key');
 const PREVIEW_EDGE = 512;
 
@@ -29,9 +30,8 @@ async function loadPolotno() {
   try {
     // dynamic import: works for both polotno-node v2 (CJS) and v3 (ESM)
     return (await import('polotno-node')).createInstance;
-  } catch (e) {
-    console.error('polotno-node is not installed. Run: npm install (in this scripts/ folder)');
-    process.exit(2);
+  } catch (error) {
+    throw new Error(`polotno-node failed to load: ${error.message}`);
   }
 }
 
@@ -59,13 +59,14 @@ async function main() {
   };
   const pageId = argValue('--page');
 
+  ensureDependencies();
   const design = JSON.parse(fs.readFileSync(input, 'utf8'));
   const createInstance = await loadPolotno();
   const instance = await createInstance({ key: KEY });
   try {
     let base64;
     if (pdf) {
-      const pdfAttrs = { skipFontError: true };
+      const pdfAttrs = {};
       if (argValue('--dpi')) pdfAttrs.dpi = Number(argValue('--dpi'));
       if (argValue('--unit')) pdfAttrs.unit = argValue('--unit');
       if (args.includes('--bleed')) pdfAttrs.includeBleed = true;
@@ -77,7 +78,13 @@ async function main() {
       if (pageId) pdfAttrs.pageIds = [pageId];
       base64 = await instance.jsonToPDFBase64(design, pdfAttrs);
     } else {
-      const attrs = { mimeType: output.toLowerCase().endsWith('.jpg') || output.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : 'image/png', pixelRatio: pixelRatioFor(design, full), skipFontError: true };
+      const attrs = {
+        mimeType:
+          output.toLowerCase().endsWith('.jpg') || output.toLowerCase().endsWith('.jpeg')
+            ? 'image/jpeg'
+            : 'image/png',
+        pixelRatio: pixelRatioFor(design, full)
+      };
       if (pageId) attrs.pageId = pageId;
       base64 = await instance.jsonToImageBase64(design, attrs);
     }
