@@ -6,6 +6,10 @@ evidence. The JSON and preflight report supply structural evidence.
 Do not rate the design with numbers. Mark each applicable check as `pass` or `block`.
 If the design does not contain the item, use `not applicable`.
 
+For a new design, apply the visual quality bar from `archetypes.md`. A violation
+of this bar is a `block`. A personal preference that does not violate the bar
+is a note.
+
 ## Proof report
 
 If a repair cycle needs a written report, use this form:
@@ -23,25 +27,34 @@ Give evidence from the current render or JSON. Name a specific repair for each
 All required copy, prices, dates, names, and calls to action must be present
 and correct. No placeholder or option text can remain.
 
+### Visual intent
+
+The design must show one deliberate visual decision that connects to the
+message, audience, or media. Generic decoration alone does not pass this check.
+
 ### Reading path
 
-The first point of attention must match the message. The remaining content
-must follow a clear order. Related items must read as one unit.
+One point of attention must clearly dominate. It must match the message. The
+remaining content must follow a clear order. Related items must read as one
+unit. Different information levels must have visibly different emphasis.
 
 ### Typography
 
 All text must be legible at the intended output size. Text must not clip,
-overflow, collide, or use a missing glyph. Type roles must remain consistent.
+overflow, collide, or use a missing glyph. Type roles must be visibly different
+and consistent. Extra font families require a reason from the brief or brand.
 
 ### Frame and spacing
 
 Alignment and spacing must form a deliberate system. Edge contact and overlap
-must be intentional. Required content must stay inside its safe area.
+must be intentional. Repeated gaps must use a clear rhythm. Empty space must
+support focus or grouping. Required content must stay inside its safe area.
 
 ### Color
 
 Text must have sufficient contrast against the pixels behind it. Color roles
-must remain consistent. Emphasis must identify the intended content.
+must remain consistent. Each authored color must have a role. Emphasis color
+must identify the intended content.
 
 ### Media
 
@@ -64,8 +77,8 @@ Use this order:
 
 1. Correct missing or wrong content.
 2. Correct clipping, overflow, missing assets, and unreadable text.
-3. Correct reading order, alignment, spacing, and crop.
-4. Correct finish details that affect the delivery contract.
+3. Correct visual intent, focus, and reading order.
+4. Correct alignment, spacing, crop, type roles, and color roles.
 
 For a short task, repair blockers and stop. Do not continue with preference-only
 adjustments after the proof passes.

@@ -87,8 +87,8 @@ each important default in the delivery note.
 
 ### 2. Plan the composition
 
-Select one layout recipe from `reference/archetypes.md`. Define concrete color,
-type, spacing, margin, and media tokens for this design.
+Select one layout recipe from `reference/archetypes.md`. Apply the visual quality
+bar in that file. Define concrete color, type, spacing, margin, and media tokens.
 
 ### 3. Compose the JSON
 

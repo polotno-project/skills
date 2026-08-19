@@ -18,6 +18,22 @@ Choose the recipe from the message structure and available assets.
 If imagery adds no useful information, use a type field. Type, figures,
 gradients, and icons produce reliable editable designs.
 
+## Visual quality bar
+
+Apply these rules to each new design:
+
+- **Focus:** Select one dominant entry point. Use size, contrast, position, or
+  isolation to separate it from all secondary content.
+- **Hierarchy:** If the content has three or more levels, make each adjacent
+  level visibly different. Do not give unrelated elements equal emphasis.
+- **Restraint:** If the brief or brand system does not require more, use at most
+  two font families. Give each color and type role a purpose.
+- **Space:** Use one spacing rhythm and deliberate alignment. Preserve empty
+  space that supports focus or grouping. Do not fill space without a content
+  purpose.
+- **Intent:** Make one visual decision that connects to the message, audience,
+  or source media. Generic decoration does not meet this rule.
+
 ## Recipes
 
 ### Type field
