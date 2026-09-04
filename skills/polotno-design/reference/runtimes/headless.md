@@ -10,8 +10,8 @@ the time and result of the last check. The file is at
 scripts use the installed packages. Set `POLOTNO_DEPENDENCY_UPDATE=never` to
 disable update checks.
 
-Rendering and asset search need a Polotno key. The scripts bundle a shared
-one (rate-limited, fine for iterating). For real use set your own:
+Rendering and asset search need a Polotno key. The scripts bundle a public
+demo key; set your own to use it instead:
 
 ```bash
 export POLOTNO_API_KEY=...   # https://polotno.com/cabinet

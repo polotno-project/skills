@@ -118,7 +118,7 @@ Without it, the skill falls back to fetching https://polotno.com/docs directly.
 
 ## Notes on the design skill
 
-`polotno-design` uses this production flow: delivery contract → composition → preflight → visual proof → repair → package. It selects a connected desktop app, a local browser editor, or headless scripts. Terminal and image-view access give the best results. Headless rendering and asset search need Node.js and a Polotno API key. If no key is set, the scripts use a rate-limited public demo key:
+`polotno-design` uses this production flow: delivery contract → composition → preflight → visual proof → repair → package. It selects a connected desktop app, a local browser editor, or headless scripts. Terminal and image-view access give the best results. Headless rendering and asset search need Node.js and a Polotno API key. If no key is set, the scripts use a public demo key:
 
 ```bash
 export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
