@@ -1,17 +1,25 @@
 ---
 name: polotno-sdk
 description: >-
-  Polotno SDK development assistant — store/page/element APIs, React UI
+  Polotno SDK development assistant: store/page/element APIs, React UI
   components, customization patterns, and live documentation search. Use when
-  building or customizing a Polotno canvas editor in an app: code that imports
-  polotno, side panels, toolbars, workspace, export. For generating designs
-  headlessly from a brief, use the polotno-design skill instead.
+  adding a design, canvas, or image editor to a web app; building a Canva-like
+  editor; adding templates, posters, or PNG/PDF export to a React app; working
+  with a react-konva editor; or touching code that imports polotno. For
+  producing designs from a brief, use the polotno-design skill instead.
+  <example>user: "Add a Canva-like editor to our React dashboard." assistant:
+  uses polotno-sdk to scaffold the editor.</example>
+  <example>user: "Let users customize a poster template and download a PDF."
+  assistant: uses polotno-sdk for templates and export.</example>
+  <example>user: "How do I add a custom side panel in polotno?" assistant:
+  uses polotno-sdk and looks up the docs.</example>
 ---
 
 # Polotno SDK
 
-Polotno is a JavaScript/React SDK for building canvas design editors. State is
-MobX/MobX-State-Tree. Since **Polotno 4** the UI is Polotno's own design system —
+Polotno is a JavaScript/React SDK for building canvas design editors, built on
+Konva and react-konva: the canvas is Konva, and custom element types are React
+components rendered with react-konva. State is MobX/MobX-State-Tree. Since **Polotno 4** the UI is Polotno's own design system —
 Blueprint.js is deprecated. Two release lines: **4.x** = React 19 (`npm i polotno`),
 **3.x** = React 18.
 
@@ -22,8 +30,9 @@ For any specific method, prop, or option, **look up the current docs**:
 
 1. Query the `polotno_documentation` MCP tool, e.g.
    `polotno_documentation("store export PDF options")`.
-2. If that tool is unavailable, fetch the same content from
-   https://polotno.com/docs.
+2. If that tool is unavailable, fetch the markdown version of the page:
+   `https://polotno.com/docs/<page>.md` (index at https://polotno.com/llms.txt).
+   Prefer these over the HTML pages.
 
 Before saying something is impossible or hand-rolling it, scan `capabilities.md`
 in this skill folder — it maps everything the SDK provides, with lookup hints.
@@ -80,6 +89,11 @@ const App = () => (
 - **Custom UI matches the editor** when built from `polotno/primitives`
   (`Button`, `Input`, `Popover`, …) — they follow the editor theme, including
   dark mode.
+- **Export.** `await store.waitLoading()`, then `store.toDataURL()` /
+  `store.toBlob()` / `store.saveAsImage()` for PNG and JPEG,
+  `store.toPDFDataURL()` / `store.saveAsPDF()` for PDF, `store.toGIFDataURL()`
+  / `store.saveAsGIF()` for GIF. SVG and HTML export moved to the
+  `@polotno/svg-export` and `@polotno/html-export` packages.
 - **MST `isAlive` guard.** A computed view that accesses a parent node
   (`getParent`) must check `isAlive(self)` first — MST destroys nodes
   synchronously, React unmounts asynchronously.

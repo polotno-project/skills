@@ -73,13 +73,15 @@ codex plugin add polotno@polotno
 Use the [skills CLI](https://github.com/vercel-labs/skills) with supported agents, such as Cursor, Copilot, Windsurf, and Cline:
 
 ```bash
-npx skills add polotno-project/skills --skill polotno-design
+npx skills add polotno-project/skills
 ```
 
-Run this command to update an installed skill:
+This installs both skills: `polotno-sdk` for developers integrating the editor and `polotno-design` for producing designs. Add `--skill <name>` to install one of them.
+
+Run this command to update installed skills:
 
 ```bash
-npx skills update polotno-design
+npx skills update
 ```
 
 ### Manual setup
