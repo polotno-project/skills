@@ -60,6 +60,11 @@ Every store needs a key: `createStore({ key })`. Don't block on it:
      `POLOTNO_API_KEY` in `.env`. Also the production origin if known
      (`https://app.example.com`, `https://*.example.com`; `electron` for
      Electron). Up to 5; a bare `*` is refused.
+     **Server key** for backend calls (Cloud Render API
+     `https://api.polotno.com/api/renders?KEY=…`): request `["server"]` alone
+     → a separate private key; save it as `POLOTNO_SERVER_KEY` in a server-only
+     env file and never in browser code or a `VITE_`/`NEXT_PUBLIC_` variable.
+     A project that needs both runs the flow twice.
   2. Start:
      ```bash
      curl -s -X POST https://polotno.com/api/connect/device \
@@ -85,8 +90,8 @@ Every store needs a key: `createStore({ key })`. Don't block on it:
      `{"key":"…","domains":[…]}` → write `VAR=key` into the env file (replace
      an existing line). `access_denied` → the user declined; `expired_token`
      → start again. The key is delivered once.
-  The account's existing key is reused with missing domains added, or the first
-  key is created. Domain changes take up to ~8 minutes to apply. Manual route:
+  The account's existing public key is reused with missing domains added, or a
+  new one is created; browser domains never go on a server key. Domain changes take up to ~8 minutes to apply. Manual route:
   https://polotno.com/cabinet → My Account → "Create your first API key".
   Free keys keep the trial badge and credit; a paid plan removes them.
 - **Reading the symptoms:** "LICENSE KEY IS MISSING" badge → no key passed;
