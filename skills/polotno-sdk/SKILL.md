@@ -77,8 +77,8 @@ Every store needs a key: `createStore({ key })`. Don't block on it:
      trial key at https://polotno.com/sdk/get-started, then start again.
   4. Poll (in the background; it waits up to 15 minutes for the user):
      ```bash
-     r=""
-     for i in $(seq 180); do   # 180 tries ≈ the code's 15 minutes
+     r=""; end=$((SECONDS + 900))   # the code's expires_in
+     while [ "$SECONDS" -lt "$end" ]; do
        r=$(curl -s -m 10 -X POST https://polotno.com/api/connect/token \
          -H 'content-type: application/json' -d '{"device_code":"<device_code>"}')
        case "$r" in
