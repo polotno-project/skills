@@ -77,19 +77,23 @@ Every store needs a key: `createStore({ key })`. Don't block on it:
      trial key at https://polotno.com/sdk/get-started, then start again.
   4. Poll (in the background; it waits up to 15 minutes for the user):
      ```bash
-     while :; do
-       r=$(curl -s -X POST https://polotno.com/api/connect/token \
+     r=""
+     for i in $(seq 180); do   # 180 tries ≈ the code's 15 minutes
+       r=$(curl -s -m 10 -X POST https://polotno.com/api/connect/token \
          -H 'content-type: application/json' -d '{"device_code":"<device_code>"}')
        case "$r" in
-         *'"key"'*|*access_denied*|*expired_token*) echo "$r"; break ;;
+         *'"key"'*|*access_denied*|*expired_token*) break ;;
          *slow_down*) sleep 10 ;;
          *) sleep 5 ;;
        esac
      done
+     echo "$r"
      ```
      `{"key":"…","domains":[…]}` → write `VAR=key` into the env file (replace
      an existing line). `access_denied` → the user declined; `expired_token`
-     → start again. The key is delivered once.
+     → start again. Anything else (empty, an error page, still pending) →
+     polotno.com was unreachable or the user didn't approve in time: tell the
+     user and start again later. The key is delivered once.
   The account's existing public key is reused with missing domains added, or a
   new one is created; browser domains never go on a server key. Domain changes take up to ~8 minutes to apply. Manual route:
   https://polotno.com/cabinet → My Account → "Create your first API key".
