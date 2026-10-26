@@ -52,16 +52,43 @@ Every store needs a key: `createStore({ key })`. Don't block on it:
   is a config change, not a code change:
   `import.meta.env.VITE_POLOTNO_KEY`, `process.env.NEXT_PUBLIC_POLOTNO_KEY`, or
   `POLOTNO_API_KEY` on the server.
-- **Own key, before deploying** (tell the user — it needs their account):
-  1. Open https://polotno.com/cabinet and sign up / log in.
-  2. In My Account, "Create your first API key" asks for the domain the editor
-     will run on, e.g. `https://app.example.com` (`https://*.example.com`
-     patterns work).
-  3. Add more domains to the key as needed: `localhost:5173` (exact host:port)
-     to test the own key locally, `headless` for polotno-node, `electron` for
-     Electron apps. Domain changes take up to ~8 minutes to apply.
-  4. Put the key in the env var above. Free keys keep the trial badge and
-     credit; a paid plan removes them.
+- **Own key, before deploying** — it needs the user's Polotno account. Get it
+  through polotno.com's connect API (device-code flow, no install):
+  1. Pick the domains, variable and file. Vite: `localhost:5173`,
+     `VITE_POLOTNO_KEY` in `.env.local`. Next.js: `localhost:3000`,
+     `NEXT_PUBLIC_POLOTNO_KEY` in `.env.local`. polotno-node: `headless`,
+     `POLOTNO_API_KEY` in `.env`. Also the production origin if known
+     (`https://app.example.com`, `https://*.example.com`; `electron` for
+     Electron). Up to 5; a bare `*` is refused.
+  2. Start:
+     ```bash
+     curl -s -X POST https://polotno.com/api/connect/device \
+       -H 'content-type: application/json' -d '{"domains":["localhost:5173"]}'
+     ```
+     → `device_code`, `user_code`, `verification_uri_complete`, `interval`,
+     `expires_in` (900 s).
+  3. Give the user the `verification_uri_complete` link and the `user_code`:
+     they sign in, check the code, and click Approve. No account yet → free
+     trial key at https://polotno.com/sdk/get-started, then start again.
+  4. Poll (in the background; it waits up to 15 minutes for the user):
+     ```bash
+     while :; do
+       r=$(curl -s -X POST https://polotno.com/api/connect/token \
+         -H 'content-type: application/json' -d '{"device_code":"<device_code>"}')
+       case "$r" in
+         *'"key"'*|*access_denied*|*expired_token*) echo "$r"; break ;;
+         *slow_down*) sleep 10 ;;
+         *) sleep 5 ;;
+       esac
+     done
+     ```
+     `{"key":"…","domains":[…]}` → write `VAR=key` into the env file (replace
+     an existing line). `access_denied` → the user declined; `expired_token`
+     → start again. The key is delivered once.
+  The account's existing key is reused with missing domains added, or the first
+  key is created. Domain changes take up to ~8 minutes to apply. Manual route:
+  https://polotno.com/cabinet → My Account → "Create your first API key".
+  Free keys keep the trial badge and credit; a paid plan removes them.
 - **Reading the symptoms:** "LICENSE KEY IS MISSING" badge → no key passed;
   console "Current domain is not allowed" → add that origin to the key;
   "Polotno Free Version" in console → working key, not a paid plan. The editor
