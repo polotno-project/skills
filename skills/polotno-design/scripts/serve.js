@@ -62,7 +62,7 @@ const designPath = path.resolve(file);
 const dependencyFingerprint = ensureDependencies();
 
 const EMPTY_DESIGN = {
-  schemaVersion: 4,
+  schemaVersion: 5,
   width: 1080,
   height: 1080,
   fonts: [],

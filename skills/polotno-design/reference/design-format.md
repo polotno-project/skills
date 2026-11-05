@@ -3,8 +3,7 @@
 The canonical shape `store.toJSON()` produces and `store.loadJSON()` accepts.
 This file gives a practical authoring subset. `scripts/validate.js` uses
 `@polotno/schema` as the source of truth. If a property is unclear, search the
-Polotno documentation or the published JSON Schema. The current format is
-**schemaVersion 4**.
+Polotno documentation or the published JSON Schema.
 
 You can write minimal JSON and omit unused defaults. The default validation mode
 accepts this partial form and does not edit the file. If canonical JSON is
@@ -17,7 +16,7 @@ before you use the canonical output.
 
 ```json
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "width": 1080,
   "height": 1080,
   "fonts": [],
@@ -25,7 +24,11 @@ before you use the canonical output.
   "audios": []
 }
 ```
-- Keep `fonts: []` — Polotno auto-loads Google fonts from each element's `fontFamily`.
+- `schemaVersion` is required. Polotno reads a missing version as the oldest
+  format and rewrites letter spacing, filters, and animations. `validate.js`
+  rejects it.
+- Keep `fonts: []` for Google fonts. Polotno loads them from each element's
+  `fontFamily`. Any other font needs an entry: see `templates-brand.md`.
 - `dpi` (default 72) matters for print: author at final pixel size — A4 at
   300dpi = 2480×3508. The export-time `dpi` option only stamps physical-size
   metadata. It does not add pixels.
@@ -38,7 +41,8 @@ before you use the canonical output.
 { "id": "p1", "background": "#ffffff", "children": [ /* elements */ ] }
 ```
 - `background` must be a solid color or gradient — never transparent for a final design.
-- For video/animation, `duration` is in ms (a 0-duration page renders nothing).
+  A gradient, here or in `fill`, is `linear-gradient(90deg, #000000 0%, #ffffff 100%)`.
+- `duration` (ms, default 5000) sets the page time in GIF and video.
 
 ## Common element properties
 
@@ -52,17 +56,19 @@ children. Put backgrounds and scrims before text.
 
 - **text** — Use `text`, `fontSize`, `fontFamily`, `fontWeight`, `fontStyle`,
   `fill`, `align`, `lineHeight`, and `letterSpacing`. Letter spacing is a
-  font-size multiple, not pixels or a percentage. Set a box that holds the text.
-  `lint.js` reports likely fit errors.
+  font-size multiple, not pixels or a percentage. The default `align` is
+  `center`. Set a box that holds the text. `lint.js` estimates fit. `render.js`
+  measures it, and the measurement decides.
 - **figure** — Use `subType`, `fill`, `stroke`, `strokeWidth`, and
   `cornerRadius`. Common subtypes include `rect`, `circle`, `star`, `triangle`,
   `line`, `diamond`, `hexagon`, and `blob1`. Use figures for decorative fields,
   scrims, dividers, and accents.
 - **image** — `src` (URL or `${photo:query}` placeholder), `cropX/cropY/cropWidth/
-  cropHeight` (0–1), `filters` (`{ brightness:{intensity:n}, … }`), `clipPath`.
+  cropHeight` (0–1), `filters` (`{ brightness:{intensity:n}, … }`), `clipSrc`.
 - **svg** — `src` (URL or `${icon:query}` placeholder), `colorsReplace` to recolor.
-- **line**, **gif**, **video**, **table**, **group** (`children`) — see the
-  Polotno documentation.
+- **line** — `color`, and `height` as its thickness. **table**: see
+  `data-content.md`. **gif**, **video**, **group** (`children`): see the Polotno
+  documentation.
 
 ## Asset placeholders
 

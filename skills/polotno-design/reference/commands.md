@@ -51,18 +51,18 @@ Page and element ids come from the design JSON itself.
 ## Eyes and output
 
 - **`render`** — render a page to pixels. Args: optional page id and
-  `pixelRatio`. View the result before delivery.
+  `pixelRatio`. Render every page and view each result before delivery.
 - **`lint`** — run deterministic JSON checks. These include placeholders,
   duplicate ids, bounds, likely text fit, tiny text, covered elements, asset
-  sources, font declarations, and print hints. A runtime can add more checks.
-  Fix each `error`. Review each `warning`. Visual proof handles contrast,
-  crop quality, and unintended overlap.
+  sources, font declarations, tables, animations, and print hints. A runtime
+  can add more checks. Fix each `error`. Review each `warning`. Visual proof
+  handles contrast, crop quality, and unintended overlap.
 - **`export`** — write the final file. Args: `format`, optional page ids,
-  format options. Every runtime accepts `png` and `jpeg`. PDF is where
+  format options. Every runtime accepts `png` and `jpeg`. Your runtime file
+  names the rest, and how to reach PowerPoint, GIF, and MP4. PDF is where
   runtimes differ: some give vector pages, some give raster pages, and some
   give both under two different format names. Read `print-pdf.md` before you
-  promise any PDF property, and your runtime file for the exact format names
-  it takes. Overpromising print features is a bug.
+  promise any PDF property. Overpromising print features is a bug.
 
 ## Typed verbs vs JSON patch
 

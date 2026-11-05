@@ -13,7 +13,8 @@ maps them to the app.
 directly.
 
 **Plain HTTP** (app 0.2+, for agents with a terminal but no MCP client).
-The app writes a discovery file while it runs:
+`node scripts/find-app.js` reports whether the app is running. The app writes a
+discovery file while it runs:
 
 - macOS: `~/Library/Application Support/polotno-app/mcp.json`
 - Windows: `%APPDATA%\polotno-app\mcp.json`
@@ -76,6 +77,15 @@ to scale, so `pixelRatio` is ignored there.
 
 The app has no CMYK, PDF/X, bleed or crop-mark options — do not promise them
 here. `print-pdf.md` lists the runtimes that do.
+
+`render` shows one page. For a design with several pages, render each page id.
+
+### PowerPoint, GIF, and MP4
+
+`export_design` has none of these. Write the output of `get_design_json` to a
+file, and run `node scripts/render.js design.json out.pptx` (or `out.gif`,
+`out.mp4`). Without a terminal, tell the user to use the app's Download menu for
+GIF and video.
 
 ## Recipes
 

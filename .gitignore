@@ -8,3 +8,6 @@ skills/polotno-design/*.pdf
 
 # tier-2 editor bundle (built by scripts/serve.js on first run)
 skills/polotno-design/scripts/.editor/
+
+# held while the scripts install npm packages
+.install-lock

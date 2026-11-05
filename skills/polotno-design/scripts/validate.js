@@ -10,6 +10,10 @@
  * The default mode accepts omitted defaults. The canonical mode requires the
  * complete store.toJSON() shape. --normalize writes canonical JSON only to the
  * explicit output path.
+ *
+ * Every mode checks schemaVersion. Polotno reads a missing version as format 0
+ * and rewrites letter spacing, filters, and animations on load, while the
+ * schema itself accepts the file.
  */
 const fs = require('fs');
 const { ensureDependencies } = require('./dependencies');
@@ -105,6 +109,32 @@ function normalizationDelta(source, normalized) {
   return delta;
 }
 
+function versionIssues(source, currentVersion, normalizing) {
+  const version = source?.schemaVersion;
+  const issues = { errors: [], warnings: [] };
+  if (version === undefined) {
+    const message =
+      `schemaVersion is missing, so Polotno reads this file as format 0 and rewrites ` +
+      `letterSpacing, filters, and animations. Set schemaVersion to ${currentVersion} for a ` +
+      `new design. For an old file, use --normalize.`;
+    issues[normalizing ? 'warnings' : 'errors'].push({ path: '/schemaVersion', message });
+  } else if (version > currentVersion) {
+    issues.errors.push({
+      path: '/schemaVersion',
+      message: `schemaVersion ${version} is newer than the installed format ${currentVersion}`
+    });
+  } else if (version < currentVersion) {
+    issues.warnings.push({
+      path: '/schemaVersion',
+      message:
+        `schemaVersion ${version} is older than format ${currentVersion}, so Polotno migrates ` +
+        `it on load. For a new design, set ${currentVersion}. For an old file, use --normalize ` +
+        `and keep the result. Changing only the number leaves old values in place.`
+    });
+  }
+  return issues;
+}
+
 async function main() {
   const { input, mode, normalizeOutput } = parseArgs(process.argv.slice(2));
   const sourceText = fs.readFileSync(input, 'utf8');
@@ -123,7 +153,8 @@ async function main() {
   }
 
   ensureDependencies();
-  const { normalizeDesign, validateDesign } = await loadSchema();
+  const { CURRENT_SCHEMA_VERSION, normalizeDesign, validateDesign } = await loadSchema();
+  const version = versionIssues(source, CURRENT_SCHEMA_VERSION, Boolean(normalizeOutput));
   let design = source;
   let validationMode = mode;
   let normalized = false;
@@ -149,22 +180,25 @@ async function main() {
   }
 
   const result = validateDesign(design, { mode: validationMode });
+  const errors = [...version.errors, ...(result.errors || [])];
+  const valid = errors.length === 0;
   const report = {
-    valid: result.valid,
+    valid,
     mode: validationMode,
     normalized,
     ...(normalized ? { changed } : {}),
     ...(normalized ? { delta } : {}),
-    ...(normalizeOutput && result.valid ? { output: normalizeOutput } : {}),
-    errors: result.errors || []
+    ...(normalizeOutput && valid ? { output: normalizeOutput } : {}),
+    errors,
+    warnings: version.warnings
   };
 
-  if (normalizeOutput && result.valid) {
+  if (normalizeOutput && valid) {
     fs.writeFileSync(normalizeOutput, `${JSON.stringify(design, null, 2)}\n`);
   }
 
   printReport(report);
-  process.exit(result.valid ? 0 : 1);
+  process.exit(valid ? 0 : 1);
 }
 
 if (require.main === module) {
@@ -174,4 +208,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { normalizationDelta, parseArgs };
+module.exports = { normalizationDelta, parseArgs, versionIssues };

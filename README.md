@@ -13,7 +13,7 @@ Read https://polotno.com/skills/design.md and follow it.
 | Skill | What it does | Use it when |
 |-------|--------------|-------------|
 | **polotno-sdk** | Polotno SDK development assistant for APIs, React components, customization, and live documentation search | You embed or customize a Polotno editor |
-| **polotno-design** | Design production through the best available Polotno runtime. It produces editable JSON, makes visual proofs, exports PNG or PDF, and creates data variants. | You want the agent to create posters, social posts, ads, flyers, invitations, or print PDFs |
+| **polotno-design** | Design production through the best available Polotno runtime. It produces editable JSON, makes visual proofs, exports PNG, PDF, PowerPoint, GIF, or MP4, and creates data variants. | You want the agent to create posters, social posts, ads, slide decks, reports, carousels, animated designs, or print PDFs |
 
 Both skills live in [`skills/`](skills/), one folder per skill with a `SKILL.md` entry point.
 
@@ -123,6 +123,8 @@ Without it, the skill falls back to fetching https://polotno.com/docs directly.
 ```bash
 export POLOTNO_API_KEY=...   # https://polotno.com/cabinet
 ```
+
+To run it from a service or pipeline, see [`reference/runtimes/backend.md`](skills/polotno-design/reference/runtimes/backend.md). The PowerPoint and vector PDF exporters live in `scripts/features/` and install on first use, so other work never loads them.
 
 ## Maintaining
 

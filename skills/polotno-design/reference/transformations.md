@@ -42,7 +42,8 @@ image subjects during crop changes. Keep the original message order.
 ### Localization
 
 Preserve meaning and brand terms. Use a font with the required glyphs. Adapt
-text fit and reading direction without copying raw geometry blindly.
+text fit and reading direction without copying raw geometry blindly. Read the
+translated text section of `data-content.md`.
 
 ### Brand application
 
@@ -52,5 +53,20 @@ requires a documented change.
 
 ### Bulk variant
 
-Change only declared slots. Use the source template for every row. Check rows
-with long text, missing values, and different media before delivery.
+Start from a design that passed the completion contract.
+
+1. Add `custom: { slot: "<name>" }` to each variable element.
+2. Map every input field to a slot or exclude it explicitly.
+3. Derive each variant from the same source. `scripts/from-template.js` does
+   this: see `templates-brand.md`.
+4. Run schema validation and preflight on every variant.
+5. View the first row, the longest-text row, and the row with most asset changes.
+6. Report failures by a stable row key.
+
+Variable text needs `textOverflow: "fit"`: see `data-content.md`.
+
+### An old source file
+
+A source below the current `schemaVersion` needs `validate.js <file> --normalize
+<out.json>` before you edit it. Keep the result. Changing only the number leaves
+old values in place.

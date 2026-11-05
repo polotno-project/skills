@@ -2,11 +2,10 @@
 name: polotno-design
 description: >-
   Create, transform, render, and bulk-produce editable Polotno designs.
-  Use for posters, flyers, social posts, ads, invitations, menus, and
-  marketing images. Also use for Polotno JSON, PNG or PDF export, print
-  output, PDF or PSD import, localization, resizing, brand application,
-  and data-driven variants. Select the best available Polotno runtime.
-  This can be a live desktop app, a local browser editor, or headless scripts.
+  Use for posters, social posts, ads, menus, slide decks, reports, proposals,
+  catalogs, carousels, and animated or video designs. Also use for Polotno JSON,
+  PNG, PDF, PowerPoint, GIF, or MP4 output, templates, brand rules, localization,
+  resizing, data-driven variants, and PDF or PSD import.
 ---
 
 # Polotno design production
@@ -22,8 +21,8 @@ The following conditions define a complete design task:
 
 - The JSON passes schema validation and preflight.
 - All required assets are present.
-- You viewed a current render.
-- The render passes `reference/proof-checks.md`.
+- You viewed a current render of every page.
+- Every page passes `reference/proof-checks.md`.
 - Each requested output file exists.
 
 If you cannot view the render, state that the design has no visual proof.
@@ -34,39 +33,33 @@ Do not describe its appearance as verified.
 Use the first available runtime. Read only its file in `reference/runtimes/`.
 An explicit user choice takes priority.
 
-1. **Desktop app through MCP.** If `create_design`, `render_page`, and
-   `lint_design` exist, use this runtime. Read `reference/runtimes/local-app.md`.
-2. **Desktop app through HTTP.** If its discovery file and health URL are
-   available, use this runtime. Read `reference/runtimes/local-app.md`.
-3. **Local browser editor.** If `scripts/serve.js` and Node.js exist, use this
-   runtime. The user browser must have access to this machine. Read
-   `reference/runtimes/local-server.md`.
-4. **Studio bridge.** This runtime is reserved and not available.
-5. **Headless scripts.** If no live editor exists, use this runtime. Also use
-   this runtime for unattended work. Read `reference/runtimes/headless.md`.
-6. **No terminal.** Author the JSON and give Studio import instructions.
+1. **Desktop app.** If `create_design`, `render_page`, and `lint_design` exist,
+   or `node scripts/find-app.js` reports `running: true`, read `local-app.md`.
+2. **Local browser editor.** If a person is present and their browser can reach
+   this machine, read `local-server.md`.
+3. **Headless scripts.** If no person is present, read `headless.md`.
+4. **No terminal.** Author the JSON and give Studio import instructions.
    State that no visual proof was possible.
 
-## Use one command vocabulary
+To run this skill inside a service or pipeline, read `backend.md`.
 
-Use these verbs from `reference/commands.md` for all runtimes:
-
-- Documents: `create_design`, `list_designs`, `get_design_json`,
-  `patch_design_json`, and `save`.
-- Elements: `add_element`, `update_element`, `remove_element`, `move_element`,
-  and `set_page`.
-- Output and size: `set_design_size`, `render`, `export`, and `lint`.
-
-The selected runtime file maps each verb to a tool, endpoint, or script.
-Do not invent a verb or transport.
+Each runtime file maps the shared verbs to its tools or scripts. Use only those
+verbs and transports.
 
 ## Read only the needed references
 
-- New design: read `reference/archetypes.md` and `reference/design-format.md`.
-- Final visual proof: read `reference/proof-checks.md`.
-- Resize, localization, brand, or bulk work: read `reference/transformations.md`.
-- Print or PDF output: read `reference/print-pdf.md`.
-- PDF, PSD, or SVG import: read `reference/import.md`.
+| Task | Read in `reference/` |
+| --- | --- |
+| New design | `archetypes.md`, `design-format.md` |
+| Final visual proof | `proof-checks.md` |
+| Several pages: deck, report, proposal, catalog, carousel | `multipage.md` |
+| Chart, table, or text from data | `data-content.md` |
+| Customer template, brand rules, or custom font | `templates-brand.md` |
+| PowerPoint output | `pptx.md` |
+| Animation, GIF, or video | `animation.md` |
+| Resize, localization, brand update, or bulk variants | `transformations.md` |
+| Print or PDF output | `print-pdf.md` |
+| PDF, PSD, or SVG import | `import.md` |
 
 ## Create a new design
 
@@ -96,7 +89,6 @@ Write the smallest Polotno JSON that expresses the planned composition. Fill
 every layout zone with final content or an asset placeholder.
 
 Run schema validation. The validator reads the source without changing it.
-If a consumer needs canonical JSON, use explicit normalization.
 
 ### 4. Resolve assets
 
@@ -111,7 +103,8 @@ record the reason for any warning that remains.
 ### 6. Make a visual proof
 
 Render the current design and view the pixels. Apply
-`reference/proof-checks.md` to the render and JSON.
+`reference/proof-checks.md` to the render and JSON. Fix each overflow that the
+render reports.
 
 Repair blocking defects first. After each content or geometry repair, run
 preflight again and make a new proof. If no blocking defect remains, stop.
@@ -131,17 +124,6 @@ protected properties. Derive each result from the source design.
 
 Run preflight on every result. Compare its proof with the source proof. Report
 each deliberate change to a protected property.
-
-## Produce bulk variants
-
-Use a design that already passed the completion contract.
-
-1. Add `custom: { slot: "<name>" }` to each variable element.
-2. Map every input field to a slot or exclude it explicitly.
-3. Derive each variant from the same source template.
-4. Run schema validation and preflight on every variant.
-5. View the first row, the longest-text row, and the row with most asset changes.
-6. Report failures by a stable row key.
 
 ## Scope
 

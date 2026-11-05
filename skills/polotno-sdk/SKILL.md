@@ -6,7 +6,7 @@ description: >-
   adding a design, canvas, or image editor to a web app; building a Canva-like
   editor; adding templates, posters, or PNG/PDF export to a React app; working
   with a react-konva editor; or touching code that imports polotno. For
-  producing designs from a brief, use the polotno-design skill instead.
+  producing designs, decks, or videos from a brief, use the polotno-design skill.
   <example>user: "Add a Canva-like editor to our React dashboard." assistant:
   uses polotno-sdk to scaffold the editor.</example>
   <example>user: "Let users customize a poster template and download a PDF."

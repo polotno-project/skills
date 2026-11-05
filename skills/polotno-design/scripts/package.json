@@ -6,9 +6,9 @@
     "test": "node test.js"
   },
   "dependencies": {
-    "@polotno/schema": ">=0.1.4 <1",
-    "polotno-node": "^3.4.0",
-    "polotno": "^4.8.0",
+    "@polotno/schema": ">=0.10.0 <1",
+    "polotno-node": "^3.16.0",
+    "polotno": "^4.19.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "esbuild": "^0.25.0"

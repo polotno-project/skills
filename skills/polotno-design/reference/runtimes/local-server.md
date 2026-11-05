@@ -20,9 +20,14 @@ scripts:
 | Verb | How |
 |---|---|
 | create/read/patch design | edit `design.json` directly (validate after) |
-| `render`, `export` | `node scripts/render.js …` (see `headless.md`) |
+| `render` | `node scripts/render.js design.json preview.png`. Several pages write `preview-1.png`, `preview-2.png`, and so on. Its JSON report lists each measured overflow |
+| `export` | `node scripts/render.js design.json` with `out.png --full`, `out.pdf`, `out.pdf --vector`, `out.pptx`, `out.gif`, or `out.mp4` |
 | schema validation | `node scripts/validate.js design.json` |
 | `lint` | `node scripts/lint.js design.json` |
+| assets | `node scripts/resolve-assets.js search photo "…"` — look, pick, paste the url. Icons: `search icon "…"` then `get icon <id>` → paste the data URL |
+
+A design with animation, video, or audio opens with the editor's timeline and
+Animate panel.
 
 ## Remote / cloud sandboxes
 

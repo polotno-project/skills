@@ -4,7 +4,8 @@ Use these checks after you view a current render. The render supplies visual
 evidence. The JSON and preflight report supply structural evidence.
 
 Do not rate the design with numbers. Mark each applicable check as `pass` or `block`.
-If the design does not contain the item, use `not applicable`.
+If the design does not contain the item, use `not applicable`. Apply the checks
+to every page.
 
 For a new design, apply the visual quality bar from `archetypes.md`. A violation
 of this bar is a `block`. A personal preference that does not violate the bar
@@ -41,7 +42,8 @@ unit. Different information levels must have visibly different emphasis.
 ### Typography
 
 All text must be legible at the intended output size. Text must not clip,
-overflow, collide, or use a missing glyph. Type roles must be visibly different
+overflow, collide, or use a missing glyph. A render that reports overflow fails
+this check. Type roles must be visibly different
 and consistent. Extra font families require a reason from the brief or brand.
 
 ### Frame and spacing

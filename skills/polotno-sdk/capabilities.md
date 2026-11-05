@@ -60,8 +60,9 @@ locking flags (`draggable`, `contentEditable`, `styleEditable`, `resizable`,
 `removable` → computed `element.locked`), `alwaysOnTop`, `showInExport`.
 
 - **text** — fonts, align, spacing, stroke, background; rich text (Polotno 4):
-  font family/size/style per fragment; `toggleEditMode()`. Note: `placeholder`
-  text renders in exports too — fill or remove before exporting.
+  font family/size/style per fragment; `toggleEditMode()`; per-element sizing
+  (`textOverflow: 'fit'`, `maxLines`, `minFontSize`, `maxFontSize`). Note:
+  `placeholder` text renders in exports too — fill or remove before exporting.
 - **image** — smart crop (`cropX/Y/Width/Height`), `clipSrc` masks/frames,
   borders, corner radius, flips, filters; `toggleCropMode()`.
 - **svg** — recolor via `replaceColor()` / `colorsReplace`, `resetColors()`.
@@ -81,14 +82,17 @@ editable designs). *Ask: "PSD import".*
 - Images: `toDataURL()`, `toBlob()` (faster), `saveAsImage()`; `pixelRatio`
   for resolution, `pageId` for one page, JPEG/PNG.
 - PDF: `toPDFDataURL()`, `saveAsPDF()` — dpi, bleed + crop marks, units.
-- Animation/video: GIF export, MP4 video export, audio mixed in.
+- Animation/video: GIF export, MP4 video export in the browser
+  (`@polotno/video-export`) and in polotno-node, audio mixed in.
 - Also HTML, SVG, PPTX (PowerPoint) export.
 *Ask: "export PDF bleed crop marks" or "video export mp4".*
 
 ## Design format & validation
 
 Every design is plain JSON (`store.toJSON()` ⇄ `store.loadJSON()`) — the Design
-Format, currently schemaVersion 4. The **`@polotno/schema`** package works with
+Format, currently schemaVersion 5. A missing `schemaVersion` means the oldest
+format, so `loadJSON` migrates the file and rewrites values. The
+**`@polotno/schema`** package works with
 it without the editor (DOM-free — servers, edge functions, LLM pipelines):
 `validateDesign(json, { mode: 'partial' | 'canonical' })` returns
 `{ valid, errors: [{ path, message }] }`; `normalizeDesign(partial)` fills
@@ -100,8 +104,9 @@ generated designs before `loadJSON` or server rendering.
 ## Server-side & automation
 
 - **polotno-node** — headless rendering in Node.js: `createInstance({ key })`,
-  `jsonToImageBase64(json)`, `instance.run()` for arbitrary store code; errors
-  carry structured codes (`IMAGE_FAILED`, `FONT_FAILED`, `DESIGN_INVALID`).
+  `jsonToImageBase64(json)`, `jsonToGIFBase64`, `jsonToVideoFile` (MP4),
+  `instance.run()` for arbitrary store code; errors carry structured codes
+  (`IMAGE_FAILED`, `FONT_FAILED`, `DESIGN_INVALID`).
 - **Cloud Render API** — managed HTTP rendering of Polotno JSON to image, GIF,
   PDF, MP4; no infrastructure, batch-friendly.
 - **Templates library pattern** — designs are just JSON: save `store.toJSON()`
@@ -111,9 +116,10 @@ generated designs before `loadJSON` or server rendering.
 
 ## Animations, video & audio
 
-Schema-driven animations on any element (move, fade, zoom, rotate, blink,
-bounce; duration/delay/easing), group animations, page `duration`, playback
-control (`store.play()`, `setCurrentTime`), global timeline UI, audio tracks
+Schema-driven enter, exit, and loop animations on any element, including text
+presets by letter, word, or line (duration, delay, easing, per-preset options);
+group animations, page `duration`, playback control (`store.play()`,
+`setCurrentTime`), global timeline UI, audio tracks
 (`store.addAudio({ src, volume, delay, startTime, endTime })`).
 *Ask: "animations api" or "audio support".*
 
